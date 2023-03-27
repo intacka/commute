@@ -1,0 +1,11 @@
+<html lagn="ko" xmlns:th="http://www.thymeleaf.org">
+<!--footerFragment 선언-->
+  <div th:fragment="sideFragment">
+    <div class="btn-group-vertical" role="group" aria-label="...">
+      <button type="button" class="btn btn-default" th:onclick="|location.href='@{/main}'|">출퇴</button><div></div>
+      <button type="button" class="btn btn-default" th:onclick="|location.href='@{/statistics}'|">통계</button><div></div>
+      <button type="button" class="btn btn-default" th:onclick="|location.href='@{/dinnervote}'|">밥투표</button><div></div>
+      <button type="button" class="btn btn-default" th:onclick="|location.href='@{/friendship}'|">우정의 밥</button><div></div>
+    </div>
+  </div>
+</html>

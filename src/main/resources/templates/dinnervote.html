@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+
+<!-- Content Start-->
+<div layout:fragment="content">
+  <span>밥 투표</span>
+  <button th:onclick="displayInput()" th:if="${dinnerVoteDtoList.size() <= 2}"> + 추가 </button>     <!--추가버튼누르면 input박스, 저장버튼 보여짐-->
+  <hr>
+
+  <div id="clock">현재시간</div>
+
+
+
+<!--  <form th:action="@{/dinnervote/input}" th:object="${dinnerVoteDto}" method="post">-->
+    <div class="table-container">
+      <table class="table table-bordered" style="text-align: center">
+        <tbody>
+            <tr th:each="dinnerVoteDto : ${dinnerVoteDtoList}">
+              <td><input type="radio" name="chk_menu" th:value="${dinnerVoteDto.dinnerVoteId}" th:disabled="${voteResult}"></td> <!--value : 선택했을 때 전달될 값-->
+              <td th:text="${dinnerVoteDto.menuTime}"></td>
+                <!--/////////////////////////////////////////////////////////-->
+              <td th:text="${dinnerVoteDto.cntMembers}+명" th:id="${dinnerVoteDto.dinnerVoteId}" class="btnTooltop" th:value="${dinnerVoteDto.dinnerVoteId}" data-tooltip="테스트"></td>
+                <!--/////////////////////////////////////////////////////////-->
+            </tr>
+
+            <div>
+            <tr th:id="newInput" style="display: none" th:if="${dinnerVoteDtoList.size() <= 2}">
+              <td><input type="radio" disabled></td> <!--value : 선택했을 때 전달될 값-->
+              <td><input type="text" name="menuTime" th:id="menuTime"></td>
+              <td>0명</td>
+            </tr>
+            </div>
+
+        </tbody>
+      </table>
+    </div>
+    <button th:disabled="!${voteResult}" th:id="revote" th:onclick="revote()">재투표</button>
+    <button th:disabled="${voteResult}" th:id="vote" th:onclick="vote()">투표</button>
+    <div/>
+    <button th:onclick="save()" style="display: none" th:id="saveButton">저장</button>
+<!--  </form>-->
+
+</div>
+<!-- Content Stop-->
+
+
+<div layout:fragment="script" >
+    <script src="https://unpkg.com/@popperjs/core@2"></script><!-- tippy 사용 위찬 연결-->
+    <script src="https://unpkg.com/tippy.js@6"></script><!-- tippy 사용 위찬 연결-->
+
+    <script type="text/javascript" th:inline="javascript">
+    let Target1 = document.getElementById("clock");
+
+    function clock() {
+      let time = new Date();
+
+      let hours = time.getHours();
+      let minutes = time.getMinutes();
+      let seconds = time.getSeconds();
+      // Target1 = ""
+      Target1.innerText =
+              `현재 : ${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+
+    }
+    clock();
+    setInterval(clock, 1000); // 1초마다 실행
+
+    function displayInput() {
+      let newInput = document.getElementById("newInput");
+      newInput.style.display = '';
+
+      let saveButton = document.getElementById("saveButton");
+      saveButton.style.display = '';
+
+        let vote = document.getElementById("vote");
+        vote.style.display = 'none';
+
+        let revote = document.getElementById("revote");
+        revote.style.display = 'none';
+
+    }
+
+    function save() {
+        const menuTime =$("#menuTime").val();
+
+        if (menuTime=="") {
+            alert('항목을 입력해주세요.')
+        } else {
+            $.ajax({
+                url: "dinnervote/input",
+                type: "POST",
+                data: {menuTime},
+                success : function(data) { // 결과 성공 콜백함수
+                    location.reload();
+                }
+            });
+
+        }
+
+    }
+
+    function vote() {
+        let dinnerVoteId = $('input[name=chk_menu]:checked').val();
+        $.ajax({
+            url: "dinnervote/vote",
+            type: "POST",
+            data: {dinnerVoteId},
+            async: false,
+            success : function(data) { // 결과 성공 콜백함수
+                location.reload();
+            }
+        });
+    }
+
+    function revote() {
+        let revote = document.getElementById("revote");
+        revote.disabled = true
+
+        let vote = document.getElementById("vote");
+        vote.disabled = false
+
+        let chk_menu = document.getElementsByName("chk_menu");
+        let radioLength = chk_menu.length
+        for (let i = 0; i < radioLength; i++) {
+            chk_menu[i].disabled = false
+        }
+    }
+
+
+
+    let dinnerVoteDtoList = /*[[${dinnerVoteDtoList}]]*/ {};
+    let arr = [];
+
+    if (dinnerVoteDtoList != null) {
+        for (let i = 0; i < dinnerVoteDtoList.length; i += 1) {
+
+            $.ajax({
+                url: "get_membernames",
+                type: "POST",
+                data: {"dinnerVoteId": dinnerVoteDtoList[i].dinnerVoteId}
+            }).done(function (data) {
+                arr[dinnerVoteDtoList[i].dinnerVoteId].setContent(data)
+                if (data=="") {
+                    arr[dinnerVoteDtoList[i].dinnerVoteId].destroy();
+                }
+            });
+
+            arr[dinnerVoteDtoList[i].dinnerVoteId] = tippy(document.getElementById(dinnerVoteDtoList[i].dinnerVoteId));
+            arr[dinnerVoteDtoList[i].dinnerVoteId].setProps({
+                placement: 'top', 		// 상단 위치
+                trigger: 'click', 		// :hover가 아닌 click시 노출
+                animation: 'shift-away',	// 아래에서 위로 올라오며 등장
+                duration: '0',
+                allowHTML: true,
+            })
+
+        }
+    }
+
+  </script>
+</div>
+
+</html>
+

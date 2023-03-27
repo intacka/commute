@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+
+
+<!-- Content Start-->
+<div layout:fragment="content">
+    <span>출근 현황</span>
+    <span id="commute_cnt" th:text="'출근인원 : ' + ${personCnt} + '명'">출근인원</span>
+    <hr>
+
+    <div class="select-box" >
+      <select name="team" id="selectId" >
+        <option value="">팀선택</option>
+        <option value="MK"  th:selected="${selectBox=='MK'}">MK</option>
+        <option value="경영지원"  th:selected="${selectBox=='경영지원'}">경영지원</option>
+        <option value="전략"  th:selected="${selectBox=='전략'}">전략</option>
+      </select>
+        <span><input type="text" class="calender" id="datepicker" readonly></span> <!--달력-->
+    </div>
+    <div></div>
+
+
+    <div class="table-container" id="commute_list">
+      <table class="table table-bordered" style="text-align: center">
+        <thead>
+        <tr>
+          <th scope="col">이름</th>
+          <th scope="col">출근시간</th>
+          <th scope="col">퇴근시간</th>
+          <th scope="col">휴식시간</th>
+          <th scope="col">근무시간</th>
+          <th scope="col">지각시간</th>
+          <th scope="col">지각사유</th>
+          <th scope="col">퇴근비고</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="commute : ${allCommuteResponseDtoList}" >
+          <td th:text="${commute.name}">이름</td>
+          <td th:text="${commute.startTime}">출근시간</td>
+          <td th:text="${commute.leaveTime}">퇴근시간</td>
+          <td th:text="${commute.lastRestTime}">휴식시간</td>
+          <td th:text="${commute.workingTime}">근무시간</td>
+          <td th:text="${commute.tardyTime}">지각시간</td>
+          <td th:text="${commute.tardyReason}">지각사유</td>
+          <td th:text="${commute.leaveNote}">퇴근비고</td>
+        </tr>
+        </tbody>
+      </table>
+
+
+
+      <div id="navigation">
+        <nav style="text-align: center;">
+          <!--    표에 사용될 변수값 초기화-->
+          <ul class="pagination"
+              th:with="start=${T(Math).floor(list.number/10)*10 + 1},
+                    last=(${start + 9 < list.totalPages ? start + 9 : list.totalPages})">
+            <th:block th:with="
+                firstAddr=@{/statistics(page=0, selectBox=${selectBox}, calenderData=${calenderData})},
+                prevAddr=@{/statistics(page=${list.number} - 1, selectBox=${selectBox}, calenderData=${calenderData})},
+                nextAddr=@{/statistics(page=${list.number} + 1, selectBox=${selectBox}, calenderData=${calenderData})},
+                lastAddr=@{/statistics(page=${list.totalPages} -1 , selectBox=${selectBox}, calenderData=${calenderData})}">
+              <li>
+                <a th:href="${firstAddr}" aria-label="First">
+                  <span aria-hidden="true">First</span>
+                </a>
+              </li>
+              <!-- 이전 페이지로 가기 버튼 -->
+              <li th:class="${list.first} ? 'disabled'">
+                <a th:href="${list.first} ? '#' :${prevAddr}"
+                   aria-label="Previous">
+                  <span aria-hidden="true">&lt;</span>
+                </a>
+              </li>
+              <!--1,2,3,4,.. 등 페이지-->
+              <li th:each="page: ${#numbers.sequence(start, last)}"
+                  th:class="${page == list.number + 1} ? 'active'">
+
+                <a th:if="${personCnt}!=0" th:text="${page}" th:href="@{/statistics(page=${page} - 1, selectBox=${selectBox}, calenderData=${calenderData})}"></a>
+<!--                // 이동할때 selectBox와 calenderData를 컨트롤러에 줘야한다.-->
+              </li>
+              <!--다음 페이지로 -->
+              <li th:class="${list.last} ? 'disabled'">
+                <a th:href="${list.last} ? '#' : ${nextAddr}"
+                   aria-label="Next">
+                  <span aria-hidden="true">&gt;</span>
+                </a>
+              </li>
+              <!--맨 마지막 페이지로 이동 -->
+              <li>
+                <a th:href="${lastAddr}" aria-label="Last">
+                  <span aria-hidden="true">Last</span>
+                </a>
+              </li>
+            </th:block>
+          </ul>
+        </nav>
+      </div>
+
+
+    </div>
+</div>
+<!-- Content Stop-->
+
+
+<div layout:fragment="script" >
+  <script>
+    $(function() {
+      //input을 datepicker로 선언
+      $("#datepicker").datepicker({
+        dateFormat: 'yy-mm-dd' //달력 날짜 형태
+        ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
+        ,showMonthAfterYear:true // 월- 년 순서가아닌 년도 - 월 순서
+        ,changeYear: true //option값 년 선택 가능
+        ,changeMonth: true //option값  월 선택 가능
+        ,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시
+        ,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로
+        ,buttonImageOnly: true //버튼 이미지만 깔끔하게 보이게함
+        ,buttonText: "선택" //버튼 호버 텍스트
+        ,yearSuffix: "년" //달력의 년도 부분 뒤 텍스트
+        ,monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 텍스트
+        ,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 Tooltip
+        ,dayNamesMin: ['일','월','화','수','목','금','토'] //달력의 요일 텍스트
+        ,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 Tooltip
+        ,minDate: "-5Y" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
+        ,maxDate: "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)
+      });
+
+      /*<![CDATA[*/
+
+
+      let cal = '[[${calenderData}]]';
+
+      // //초기값을 오늘 날짜로 설정해줘야 합니다.
+      $('#datepicker').datepicker('setDate', cal); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
+    });
+      /*]]*/
+
+    // let calenderData = $('.calender').attr('value')
+    $("#datepicker").change(function(){
+      $.ajax({
+        url: "statistics_test",
+        type: "GET",
+        data: {"selectBox": $("#selectId option:selected").attr('value'),
+               "calenderData": $('#datepicker').val()},
+      }).done(function (data){
+        console.log(data);
+        $("#commute_list").replaceWith(data)
+      });
+
+      $.ajax({
+        url: "cnt",
+        type: "GET",
+        data: {"selectBox": $("#selectId option:selected").attr('value'),
+          "calenderData": $('#datepicker').val()}
+      }).done(function (data){
+        $("#commute_cnt").replaceWith(data)
+      });
+
+
+     });
+
+
+
+    $(".select-box").change(function(){
+      $.ajax({
+        url: "statistics_test",
+        type: "GET",
+        data: {"selectBox": $("#selectId option:selected").attr('value'),
+          "calenderData": $('#datepicker').val()}
+      }).done(function (data){
+        console.log(data);
+        $("#commute_list").replaceWith(data)
+      });
+
+      $.ajax({
+        url: "cnt",
+        type: "GET",
+        data: {"selectBox": $("#selectId option:selected").attr('value'),
+          "calenderData": $('#datepicker').val()}
+      }).done(function (data){
+        $("#commute_cnt").replaceWith(data)
+      });
+
+
+
+    });
+
+    // $(".navigation").change(function(){
+    //   $.ajax({
+    //     url: "statistics_test",
+    //     type: "GET",
+    //     data: {"selectBox": $("#selectId option:selected").attr('value'),
+    //       "calenderData": $('#datepicker').val()}
+    //   }).done(function (data){
+    //     console.log(data);
+    //     $("#commute_list").replaceWith(data)
+    //   });
+    //
+    // });
+
+
+
+
+
+  </script>
+</div>
+
+
+
+
+</html>
+

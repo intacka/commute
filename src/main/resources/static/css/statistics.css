@@ -1,0 +1,124 @@
+body {
+    margin: 0;
+}
+
+
+.header1 {
+    grid-area: header1;
+    display: grid;
+    grid-template-columns: 25vw 25vw 25vw 25vw;
+    border: solid 1px black;
+    border-bottom: none;
+    box-sizing: border-box;
+}
+
+.header1 > * {
+    height: 3vh;
+}
+
+.header1 > :nth-child(1) {
+    background-color: darkblue;
+    color: white;
+    border-right: solid 1px black;
+}
+
+.header1 > :nth-child(3) {
+    background-color: darkblue;
+    color: white;
+    border-left: solid 1px black;
+}
+
+.header2 {
+    grid-area: header2;
+    display: grid;
+    grid-template-columns: 25vw 25vw 50vw;
+    border: solid 1px black;
+    border-bottom: none;
+    box-sizing: border-box;
+}
+
+.header2 > :nth-child(1) {
+    border-right: solid 1px black;
+}
+
+.header2 > :nth-child(3) {
+    border-left: solid 1px black;
+}
+
+.header2 > * {
+    height: 5vh;
+    box-sizing: border-box;
+}
+
+
+
+.main-container {
+    display: flex;
+    height: 89vh;
+}
+
+.select-box #clock {
+    border: solid 1px black;
+    box-sizing: border-box;
+    background: #dddddd;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.side {
+    width: 10%;
+    border: solid 1px black;
+    border-right: none;
+    box-sizing: border-box;
+    display:table;
+    table-layout:fixed;
+    background:#ddd;
+    text-align:center;
+}
+
+.button-item {
+    display:table-cell;
+    vertical-align:middle;
+    white-space: initial;
+    cursor: pointer;
+
+}
+.button-item:hover {
+    background: cornflowerblue;
+
+}
+
+
+
+.content {
+    width: 90%;
+    padding: 20px;
+    border: solid 1px black;
+    box-sizing: border-box;
+}
+
+#commute-cnt {
+    float: right;
+    border: solid 1px black;
+    box-sizing: border-box;
+    background: #dddddd;
+    border-radius: 2px;
+}
+
+.table-container {
+    padding-top: 40px;
+}
+
+.table-container table {
+    border: 2px solid #444444;
+    box-sizing: border-box;
+    text-align:center;
+    margin: auto;
+    width : 100%;
+    border-collapse: collapse;
+}
+
+.table-container th, td {
+    border: 1px solid #444444;
+    box-sizing: border-box;
+  }

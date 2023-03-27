@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+
+<!-- Content Start-->
+<div layout:fragment="content">
+  <span>우정의 밥</span>
+  <button type="button" class="btn btn-default" th:onclick="createGathering()">모임 생성</button>
+  <hr>
+  <div id='calendar'></div>
+
+
+</div>
+<!-- Content Stop-->
+
+
+<div layout:fragment="script" >
+  <script>
+    // document.addEventListener('DOMContentLoaded', function() {
+    //   let calendarEl = document.getElementById('calendar');
+    //   let calendar = new FullCalendar.Calendar(calendarEl, {
+    //     height: '600px', // calendar 높이 설정
+    //     expandRows: true, // 화면에 맞게 높이 재설정
+    //     headerToolbar: {
+    //       left: 'prev,next today',
+    //       center: 'title',
+    //       right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+    //     },
+    //     locale: 'ko', // 한국어 설정
+    //     events: [
+    //       {
+    //         "title":"1",
+    //         "start":"2023-02-27",
+    //         "allDay" : false
+    //       }
+    //     ],
+    //
+    //
+    //     initialView: 'dayGridMonth'// 초기 로드 될때 보이는 캘린더 화면(기본 설정: 달)
+    //   });
+    //   calendar.render();
+    // });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      $(function () {
+        console.log("request 받아오기")
+        let request = $.ajax({
+          url: "/calendar-reload", // 변경하기
+          method: "POST",
+          dataType: "json"
+        });
+
+        request.done(function (data) {
+          let calendarEl = document.getElementById('calendar');
+
+          let calendar = new FullCalendar.Calendar(calendarEl, {
+            // initialDate: '2022-02-07',
+            height: '600px', // calendar 높이 설정
+            expandRows: true, // 화면에 맞게 높이 재설정
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+            },
+            drop: function (arg) {
+              // is the "remove after drop" checkbox checked?
+              if (document.getElementById('drop-remove').checked) {
+                // if so, remove the element from the "Draggable Events" list
+                arg.draggedEl.parentNode.removeChild(arg.draggedEl);
+              }
+            },
+            /**
+             * data 로 값이 넘어온다. log 값 전달.
+             */
+            events: data
+          });
+
+          calendar.render();
+        });
+
+
+      });
+    });
+
+
+
+
+    function createGathering() {
+      $(function () {
+
+        console.log("request 받아오기")
+        let request = $.ajax({
+          url: "/calendar", // 변경하기
+          method: "POST",
+          dataType: "json"
+        });
+
+        request.done(function (data) {
+          let calendarEl = document.getElementById('calendar');
+
+          let calendar = new FullCalendar.Calendar(calendarEl, {
+            // initialDate: '2022-02-07',
+            height: '600px', // calendar 높이 설정
+            expandRows: true, // 화면에 맞게 높이 재설정
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+            },
+            drop: function (arg) {
+              // is the "remove after drop" checkbox checked?
+              if (document.getElementById('drop-remove').checked) {
+                // if so, remove the element from the "Draggable Events" list
+                arg.draggedEl.parentNode.removeChild(arg.draggedEl);
+              }
+            },
+            /**
+             * data 로 값이 넘어온다. log 값 전달.
+             */
+            events: data,
+
+          });
+
+          calendar.render();
+        });
+
+        request.fail(function( jqXHR, textStatus ) {
+          alert( "Request failed: " + textStatus );
+        });
+      });
+
+    }
+
+
+
+
+
+
+  </script>
+</div>
+
+</html>
+

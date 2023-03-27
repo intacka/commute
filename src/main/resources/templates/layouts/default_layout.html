@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lagn="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8" />
+    <title>AI STUDIO WORK (PRACTICE)</title>
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0, minimum-scale=1, user-scalable=yes,initial-scale=1.0" />
+
+    <!--    제이쿼리-->
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!--공통으로 쓰이는 CSS, JS-->
+    <link rel="stylesheet" href="/css/index.css">
+    <!-- 부트스트랩(합쳐지고 최소화된 최신 CSS) -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <!-- 부트스트랩(부가적인 테마) -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+
+    <!-- Content : CSS, JS-->
+    <!-- content css -->
+    <th:block layout:fragment="css"></th:block>
+
+
+</head>
+<body>
+<!-- header fragment 사용 -->
+<th:block th:replace="fragments/header :: headerFragment"></th:block>
+
+    <div class="main-container">
+        <div class="side">
+            <!-- side fragment 사용 -->
+            <th:block th:replace="fragments/side :: sideFragment"></th:block>
+        </div>
+        <div class="content">
+            <!-- content fragment 사용 -->
+            <th:block layout:fragment="content"></th:block>
+        </div>
+    </div>
+
+</body>
+<!--    <script src="https://unpkg.com/@popperjs/core@2"></script>&lt;!&ndash; tippy 사용 위찬 연결&ndash;&gt;-->
+<!--    <script src="https://unpkg.com/tippy.js@6"></script>&lt;!&ndash; tippy 사용 위찬 연결&ndash;&gt;-->
+
+
+    <!-- 부트스트랩:합쳐지고 최소화된 최신 자바스크립트 -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="/js/index.js"></script>
+
+    <!--캘린더-->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.js'></script>
+    <!-- content script -->
+    <th:block layout:fragment="script"></th:block>
+
+
+</html>

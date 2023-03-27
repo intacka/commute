@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>WORK COMMUTE</title>
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<!-- <body class="body" style="margin: 0px;"> -->
+<body>
+<!--<div class="main-container">-->
+<!--    <div class="login-wrapper">-->
+<!--        <h2>AISTUDIO WORK <br>WORK</h2>-->
+<!--        <form name="fform" method="post" action="/main" id="login-form">-->
+<!--            <input type="text" id="memberId" name="memberId" placeholder="ID">-->
+<!--            <input type="password" name="memberPw" placeholder="PW">-->
+<!--            <label for="remember-check">-->
+<!--                <input type="checkbox" id="remember-check" name="idCheck" th:value="idCheck">remember ID-->
+<!--            </label>-->
+<!--            <input id="loginbtn" class="loginbtn" type="submit" value="Log In">-->
+<!--        </form>-->
+<!--    </div>-->
+<!--</div>-->
+<div class="main-container">
+    <div class="login-wrapper">
+        <h2>AISTUDIO WORK <br>WORK</h2>
+<!--        <form id="loginForm" name="loginForm" action="/main" method="post" onsubmit="return frm_check();" >-->
+        <form id="loginForm" name="loginForm" th:action="@{/login}" method="post" onsubmit="return frm_check();" >
+            <div th:if="${param.error}" class="alert alert-error">
+                아이디와 비밀번호를 확인해주세요.
+            </div>
+            <input type="text" name="memberId" id="logId" title="아이디 입력" placeholder="ID">
+            <input type="password" name="memberPw" id="logPW" title="비밀번호 입력"  placeholder="PW">
+            <div class="logSave">
+                <input type="checkbox" class="save_id" name="checkId" id="saveId" >
+                <label for="saveId">아이디 저장</label>
+            </div>
+            <div class="logBtn w1">
+                <input type="submit" class="log_btn bg1" value="로그인">
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+
+
+<script type="text/javascript">
+    $(function() {
+
+        fnInit();
+
+    });
+
+    function frm_check(){   // submit 하기전에 script를 확인하게 된다.
+        saveid();
+    }
+
+    function fnInit(){
+        var cookieid = getCookie("saveid");
+        console.log(cookieid);
+        if(cookieid !=""){
+            $("input:checkbox[id='saveId']").prop("checked", true);
+            $('#logId').val(cookieid);
+        }
+
+    }
+
+    function setCookie(name, value, expiredays) {
+        var todayDate = new Date();
+        todayDate.setTime(todayDate.getTime() + 0);
+        if(todayDate > expiredays){
+            document.cookie = name + "=" + escape(value) + "; path=/; expires=" + expiredays + ";";
+        }else if(todayDate < expiredays){
+            todayDate.setDate(todayDate.getDate() + expiredays);
+            document.cookie = name + "=" + escape(value) + "; path=/; expires=" + todayDate.toGMTString() + ";";
+        }
+        console.log(document.cookie);
+    }
+
+    function getCookie(Name) {
+        var search = Name + "=";
+        console.log("search : " + search);
+
+        if (document.cookie.length > 0) { // 쿠키가 설정되어 있다면
+            offset = document.cookie.indexOf(search);
+            console.log("offset : " + offset);
+            if (offset != -1) { // 쿠키가 존재하면
+                offset += search.length;
+                // set index of beginning of value
+                end = document.cookie.indexOf(";", offset);
+                console.log("end : " + end);
+                // 쿠키 값의 마지막 위치 인덱스 번호 설정
+                if (end == -1)
+                    end = document.cookie.length;
+                console.log("end위치  : " + end);
+
+                return unescape(document.cookie.substring(offset, end));
+            }
+        }
+        return "";
+    }
+
+    function saveid() {             // 체크박스에 체크값에 대하여 조건에 따라 시간을 구해줍니다.
+        let expdate = new Date();
+        if ($("#saveId").is(":checked")){
+            expdate.setTime(expdate.getTime() + 1000 * 3600 * 24 * 30); // expdate = 30일뒤 시간
+            setCookie("saveid", $("#logId").val(), expdate);
+        }else{
+            expdate.setTime(expdate.getTime() - 1000 * 3600 * 24 * 30); // 30일 전시간 (마이너스값을 넣어주면 쿠키시간이 존재하지 않는다)
+            setCookie("saveid", $("#logId").val(), expdate);
+
+        }
+    }
+
+
+
+
+</script>
+
+</html>

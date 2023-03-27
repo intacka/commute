@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>WORK COMMUTE</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <!-- 부트스트랩(합쳐지고 최소화된 최신 CSS) -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <!-- 부트스트랩(부가적인 테마) -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+    <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+</head>
+<!-- <body class="body" style="margin: 0px;"> -->
+<body>
+<!--    <div class="header1">-->
+<!--        <div class="grid-item1">화면명</div>-->
+<!--        <div class="grid-item1">MAIN</div>-->
+<!--        <div class="grid-item1">경로</div>-->
+<!--        <div class="grid-item1">MAIN > LOGIN</div>-->
+<!--    </div>-->
+
+    <div class="header">
+        <div class="grid-item2">AISTUDIO WORK</div>
+        <div class="grid-item2" th:text="${name}">"이름</div>
+        <div class="grid-item2">logout</div>
+    </div>
+
+<div class="main-container">
+<!--    <div class="side">-->
+<!--        <button class="button-item" th:onclick="|location.href='@{/}'|">출퇴</button><div></div>-->
+<!--        <button class="button-item" th:onclick="|location.href='@{/statistics}'|">통계</button><div></div>-->
+<!--        <button class="button-item">밥투표</button><div></div>-->
+<!--        <button class="button-item">우정의 밥</button><div></div>-->
+<!--    </div>-->
+    <div class="side">
+        <div class="btn-group-vertical" role="group" aria-label="...">
+            <button type="button" class="btn btn-default" th:onclick="|location.href='@{/}'|">출퇴</button><div></div>
+            <button type="button" class="btn btn-default" th:onclick="|location.href='@{/statistics}'|">통계</button><div></div>
+            <button type="button" class="btn btn-default">밥투표</button><div></div>
+            <button type="button" class="btn btn-default">우정의 밥</button><div></div>
+        </div>
+    </div>
+    <div class="content">
+        <div>출근 퇴근</div>
+        <hr>
+        <div class="information-button">
+            <span id="clock">현재시간</span>
+            <span>출근 : (출근시간)</span>
+            <span>근무 : (근무시간)</span>
+            <span>퇴근 : (퇴근시간)</span>
+            <span>휴식 : (휴식시간)</span>
+            <button type="button" class="btn btn-default">퇴근</button>
+            <button type="button" class="btn btn-default">휴식</button>
+        </div>
+        <div></div>
+
+    
+      <div class="table-container">
+        <table class="table table-bordered" style="text-align: center">
+          <thead>
+            <tr>
+              <th scope="col">날짜</th>
+              <th scope="col">출근시간</th>
+              <th scope="col">퇴근시간</th>
+              <th scope="col">휴식시간</th>
+              <th scope="col">근무시간</th>
+              <th scope="col">지각시간</th>
+              <th scope="col">지각사유</th>
+              <th scope="col">퇴근비고</th>
+            </tr>
+          </thead>
+          <tbody>
+          <tr th:each="commute : ${commuteResponseDtoList}">
+              <td th:text="${commute.commuteDate}">날짜</td>
+              <td th:text="${commute.startTime}">출근시간</td>
+              <td th:text="${commute.leaveTime}">퇴근시간</td>
+              <td th:text="${commute.lastRestTime}">휴식시간</td>
+              <td th:text="${commute.workingTime}">근무시간</td>
+              <td th:text="${commute.tardyTime}">지각시간</td>
+              <td th:text="${commute.tardyReason}">지각사유</td>
+              <td th:text="${commute.leaveNote}">퇴근비고</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+</div>
+</body>
+<script src="/js/index.js"></script>
+</html>

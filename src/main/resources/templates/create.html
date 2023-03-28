@@ -19,6 +19,16 @@
             color:#6A82FB;
             display: none;
         }
+        .pw_ok{
+            color:#008000;
+            display: none;
+        }
+
+        .pw_already{
+            color:#6A82FB;
+            display: none;
+        }
+
     </style>
 </head>
 <!-- <body class="body" style="margin: 0px;"> -->
@@ -32,8 +42,13 @@
         <span class="id_ok">아이디 사용 가능.</span>
         <span class="id_already">아이디 사용 불가.</span>
 
-        <input type="password" name="memberPw" id="input_pw" title="비밀번호 입력"  placeholder="비밀번호 입력" th:maxlength="15">
-        <input type="password" name="memberPw" id="confrim_pw" title="비밀번호 확인"  placeholder="비밀번호 확인" th:maxlength="15">
+        <input type="password" name="memberPw" id="input_pw" title="비밀번호 입력" placeholder="비밀번호 입력" th:maxlength="15">
+        <input type="password" name="memberPw" id="confrim_pw" title="비밀번호 확인" placeholder="비밀번호 확인" th:maxlength="15" oninput = "checkPw()">
+        <!-- id ajax 중복체크 -->
+        <span class="pw_ok">비밀번호 일치.</span>
+        <span class="pw_already">비밀번호 불일치</span>
+
+
         <input type="text" name="memberPw" id="input_name" title="이름 입력"  placeholder="이름 입력" th:maxlength="12">
         <input type="text" name="memberPw" id="input_team" title="팀 입력"  placeholder="팀 입력" th:maxlength="12">
         <div class="logBtn w1">
@@ -49,6 +64,7 @@
 
 
 <script type="text/javascript">
+    let pwResult = false
     function checkId(){
         let id = $('#input_id').val(); //id값이 "input_id"인 입력란의 값을 저장
         if (id.length < 4) {
@@ -80,6 +96,22 @@
 
     };
 
+    function checkPw(){
+        let pw = $('#input_pw').val(); //id값이 "input_pw"인 입력란의 값을 저장
+        let cfPw = $('#confrim_pw').val();
+
+        if (pw == cfPw) {
+            $('.pw_already').css("display","none");
+            $('.pw_ok').css("display", "inline-block");
+            pwResult = true
+        } else {
+            $('.pw_already').css("display","inline-block");
+            $('.pw_ok').css("display", "none");
+            pwResult = false
+        }
+
+    };
+
 
     function join(){
         let id_chk_condition = $('.id_ok').css("display");
@@ -96,6 +128,8 @@
 
             if(id == "" || pw == "" || name == "" || team == "") {
                 alert("비어있는 입력란을 입력해주세요.")
+            } else if (pwResult==false) {
+                alert("입력한 비밀번호를 확인해주세요.")
             } else {
                 // 아이디 체크 확인됨
                 // DB로 보내서 회원가입 시키기

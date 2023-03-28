@@ -141,4 +141,11 @@ public class DinnerVoteServiceImpl implements DinnerVoteService {
 
         return finalNames;
     }
+
+    @Override
+    @Transactional
+    public void deleteAll() {
+        LocalDate today = LocalDate.now();
+        dinnerVoteRepository.deleteBydinnerDate(today);
+    }
 }

@@ -9,6 +9,7 @@
 <div layout:fragment="content">
   <span>밥 투표</span>
   <button th:onclick="displayInput()" th:if="${dinnerVoteDtoList.size() <= 2}"> + 추가 </button>     <!--추가버튼누르면 input박스, 저장버튼 보여짐-->
+  <button th:onclick="menuReset()" th:if="${dinnerVoteDtoList.size() >= 1}"> 메뉴 Reset </button>
   <hr>
 
   <div id="clock">현재시간</div>
@@ -160,6 +161,23 @@
 
         }
     }
+
+    function menuReset() {
+        if (confirm("모든 메뉴를 Reset 하시겠습니까?") == true) {
+            $.ajax({
+                url: "menureset",
+                type: "POST",
+                async: false,
+                success: function () { // 결과 성공 콜백함수
+
+                }
+            });
+            window.location.reload('/dinnervote');
+        }
+
+    }
+
+
 
   </script>
 </div>

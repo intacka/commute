@@ -171,7 +171,11 @@ public class DinnerVoteController {
 
 
 
+    @PostMapping(value = "/menureset")
+    public void menuReset() {
+        dinnerVoteService.deleteAll();
 
+    }
 
 
 

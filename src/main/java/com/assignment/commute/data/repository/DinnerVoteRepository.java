@@ -12,4 +12,6 @@ public interface DinnerVoteRepository extends JpaRepository<DinnerVote, Integer>
     List<DinnerVote> findAllByDinnerDateOrderByCreatedAt(LocalDate today);
 
     Optional<DinnerVote> findByMembersContaining(String id);
+
+    void deleteBydinnerDate(LocalDate localDate);
 }

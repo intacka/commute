@@ -13,4 +13,6 @@ public interface DinnerVoteService {
     void addMember(Long id, int dinnerVoteId);
 
     String getMemberNames(Integer dinnerVoteId);
+
+    void deleteAll();
 }

@@ -11,6 +11,7 @@ import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -203,12 +204,9 @@ public class HomeController {
 //            boolean loginResult = memberService.login(memberDto.getMemberId(), memberDto.getMemberPw());
 //            if (loginResult) { // 로그인 성공시
 
-                // 만약 idCheck에 체크가 되어있다면,
-                // 그리고 쿠키값이 비어있다면,
-                // ----->>>> 쿠키저장
 
 
-
+            try {
                 // 이름 Return
                 String name = memberService.searchName(principal.getName());
 
@@ -219,8 +217,12 @@ public class HomeController {
                 // 출퇴근기록 Model에 갖다주기
                 id = memberService.searchId(principal.getName());
                 // main.html로
+            } catch (Exception e) {
+                return "redirect:/login"; // 로그인 실패로 redirect
+            }
+
+
 //            } else { // 로그인 실패시
-//                return "redirect:/login"; // 로그인 실패로 redirect
 //            }
         }
         // boolean restStopPossibile : 휴식DB가 있는지

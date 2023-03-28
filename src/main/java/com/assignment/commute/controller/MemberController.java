@@ -5,13 +5,20 @@ import com.assignment.commute.data.dto.CommuteResponseDto;
 import com.assignment.commute.data.dto.MemberDto;
 import com.assignment.commute.data.dto.MemberResponseDto;
 import com.assignment.commute.data.dto.RestResponseDto;
+import com.assignment.commute.data.entity.Commute;
 import com.assignment.commute.service.CommuteService;
 import com.assignment.commute.service.MemberService;
 import com.assignment.commute.service.RestService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -90,10 +97,13 @@ public class MemberController {
 //        return statisticsResult;
 //    }
 
+    @RequestMapping(value = "/idCheck")
+    public int idCheck(@RequestParam("id") String id) {
 
+        int cnt = memberService.idCheck(id);
+        return cnt;
 
-
-
+    }
 
 }
 

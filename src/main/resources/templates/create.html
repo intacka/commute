@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>WORK COMMUTE</title>
+    <link rel="stylesheet" href="/css/login.css">
+
+
+    <style>
+        .id_ok{
+            color:#008000;
+            display: none;
+        }
+
+        .id_already{
+            color:#6A82FB;
+            display: none;
+        }
+    </style>
+</head>
+<!-- <body class="body" style="margin: 0px;"> -->
+<body>
+<div class="main-container">
+    <div class="login-wrapper">
+        <h2>회원가입</h2>
+        <!--        <form id="loginForm" name="loginForm" action="/main" method="post" onsubmit="return frm_check();" >-->
+        <input type="text" name="memberId" id="input_id" title="아이디 입력" placeholder="아이디 입력" oninput = "checkId()" th:maxlength="12">
+        <!-- id ajax 중복체크 -->
+        <span class="id_ok">아이디 사용 가능.</span>
+        <span class="id_already">아이디 사용 불가.</span>
+
+        <input type="password" name="memberPw" id="input_pw" title="비밀번호 입력"  placeholder="비밀번호 입력" th:maxlength="15">
+        <input type="password" name="memberPw" id="confrim_pw" title="비밀번호 확인"  placeholder="비밀번호 확인" th:maxlength="15">
+        <input type="password" name="memberPw" id="input_name" title="이름 입력"  placeholder="이름 입력" th:maxlength="12">
+        <input type="password" name="memberPw" id="input_team" title="팀 입력"  placeholder="팀 입력" th:maxlength="12">
+        <div class="logBtn w1">
+            <input type="submit" class="log_btn bg1" value="회원가입" th:onclick="join()">
+        </div>
+    </div>
+</div>
+</body>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+
+
+<script type="text/javascript">
+    function checkId(){
+        let id = $('#input_id').val(); //id값이 "input_id"인 입력란의 값을 저장
+        if (id.length < 4) {
+            $('.id_already').css("display","inline-block");
+            $('.id_ok').css("display", "none");
+            $('#id').val('');
+        } else {
+            $.ajax({
+                url:'member/idCheck', //Controller에서 요청 받을 주소
+                type:'post', //POST 방식으로 전달
+                data:{id},
+                success:function(cnt){ //컨트롤러에서 넘어온 cnt값을 받는다
+                    console.log("id : " + id)
+                    if(cnt == 0){ //cnt가 1이 아니면(=0일 경우) -> 사용 가능한 아이디
+                        $('.id_ok').css("display","inline-block");
+                        $('.id_already').css("display", "none");
+                    } else { // cnt가 1일 경우 -> 이미 존재하는 아이디
+                        $('.id_already').css("display","inline-block");
+                        $('.id_ok').css("display", "none");
+                        $('#id').val('');
+                    }
+                },
+                error:function(){
+                    alert("에러입니다");
+                }
+            });
+
+        }
+
+    };
+
+
+    function join(){
+        let id_chk_condition = $('.id_ok').css("display");
+        if (id_chk_condition == "inline-block") {
+            //
+            let id = $('#input_id').val();
+            let pw = $('#input_pw').val();
+            let name = $('#input_name').val();
+            let team = $('#input_team').val();
+            console.log("id : " + id)
+            console.log("pw : " + pw)
+            console.log("name : " + name)
+            console.log("team : " + team)
+
+            if(id == "" || pw == "" || name == "" || team == "") {
+                alert("비어있는 입력란을 입력해주세요.")
+            } else {
+                // 아이디 체크 확인됨
+                // DB로 보내서 회원가입 시키기
+
+                $.ajax({
+                    url:'/real-create', //Controller에서 요청 받을 주소
+                    type:'post', //POST 방식으로 전달
+                    data:{id, pw, name, team},
+                    success:function(data){ //컨트롤러에서 넘어온 cnt값을 받는다
+                        alert("회원가입이 완료되었습니다!")
+                    },
+                    error:function(){
+                        alert("에러입니다");
+                    }
+                });
+
+
+
+            }
+        } else {
+            alert("사용가능한 아이디를 먼저 확인해주세요.")
+        }
+    };
+</script>
+
+</html>

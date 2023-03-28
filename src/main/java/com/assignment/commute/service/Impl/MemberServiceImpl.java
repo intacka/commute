@@ -1003,4 +1003,34 @@ public class MemberServiceImpl implements MemberService {
     public void deletefindMemberCalendarList() {
         memberCalendarRepository.deleteAll();
     }
+
+    @Override
+    public int idCheck(String id) {
+        // 입력한 아이디가 DB에 있는지 확인
+        Member member = memberRepository.findByMemberId(id).orElse(null);
+
+        if (member==null) {
+            return 0;
+        } else {
+            return 1;
+        }
+
+    }
+
+    @Override
+    public void createMember(String id, String pw, String name, String team) {
+
+        Member member = new Member();
+        member.setMemberId(id);
+        member.setTeam(team);
+        member.setName(name);
+        member.setRole("default");
+
+//      member.setMemberPw(memberDto.getMemberPw());
+        String encodedPassword = bCryptPasswordEncoder.encode(pw);
+        member.setMemberPw(encodedPassword);
+
+        memberRepository.save(member);
+
+    }
 }

@@ -26,4 +26,8 @@ public interface MemberService {
     List<MemberCalendarDto> findMemberCalendarList();
 
     void deletefindMemberCalendarList();
+
+    int idCheck(String id);
+
+    void createMember(String id, String pw, String name, String team);
 }

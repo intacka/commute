@@ -34,10 +34,13 @@
 
         <input type="password" name="memberPw" id="input_pw" title="비밀번호 입력"  placeholder="비밀번호 입력" th:maxlength="15">
         <input type="password" name="memberPw" id="confrim_pw" title="비밀번호 확인"  placeholder="비밀번호 확인" th:maxlength="15">
-        <input type="password" name="memberPw" id="input_name" title="이름 입력"  placeholder="이름 입력" th:maxlength="12">
-        <input type="password" name="memberPw" id="input_team" title="팀 입력"  placeholder="팀 입력" th:maxlength="12">
+        <input type="text" name="memberPw" id="input_name" title="이름 입력"  placeholder="이름 입력" th:maxlength="12">
+        <input type="text" name="memberPw" id="input_team" title="팀 입력"  placeholder="팀 입력" th:maxlength="12">
         <div class="logBtn w1">
             <input type="submit" class="log_btn bg1" value="회원가입" th:onclick="join()">
+        </div>
+        <div>
+            <button th:onclick="|location.href='@{/login}'|">로그인 페이지로..</button>
         </div>
     </div>
 </div>
@@ -101,8 +104,23 @@
                     url:'/real-create', //Controller에서 요청 받을 주소
                     type:'post', //POST 방식으로 전달
                     data:{id, pw, name, team},
-                    success:function(data){ //컨트롤러에서 넘어온 cnt값을 받는다
-                        alert("회원가입이 완료되었습니다!")
+                    success:function(data){
+                        alert("회원가입이 완료되었습니다! 로그인 해주세요.")
+                        document.getElementById("input_id").value = '' // input값 변경
+                        document.getElementById("input_pw").value = '' // input값 변경
+                        document.getElementById("confrim_pw").value = '' // input값 변경
+                        document.getElementById("input_name").value = '' // input값 변경
+                        document.getElementById("input_team").value = '' // input값 변경
+
+                        window.location.href='/login';
+                        // location.reload();
+
+                        // window.history.forward();
+                        // function noBack(){window.history.forward();}
+
+
+
+                        // window.location.href='/login';
                     },
                     error:function(){
                         alert("에러입니다");

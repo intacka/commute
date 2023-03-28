@@ -9,6 +9,7 @@
 <div layout:fragment="content">
   <span>우정의 밥</span>
   <button type="button" class="btn btn-default" th:onclick="createGathering()">모임 생성</button>
+  <button type="button" class="btn btn-default" th:onclick="deleteGathering()">모임 삭제</button>
   <hr>
   <div id='calendar'></div>
 
@@ -138,7 +139,51 @@
 
 
 
+    function deleteGathering() {
+      $(function () {
 
+        let request = $.ajax({
+          url: "/delete-calendar", // 데이터지우기
+          method: "POST"
+
+        });
+
+        request.done(function (data) {
+          let calendarEl = document.getElementById('calendar');
+
+          let calendar = new FullCalendar.Calendar(calendarEl, {
+            // initialDate: '2022-02-07',
+            height: '600px', // calendar 높이 설정
+            expandRows: true, // 화면에 맞게 높이 재설정
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+            },
+            drop: function (arg) {
+              // is the "remove after drop" checkbox checked?
+              if (document.getElementById('drop-remove').checked) {
+                // if so, remove the element from the "Draggable Events" list
+                arg.draggedEl.parentNode.removeChild(arg.draggedEl);
+              }
+            },
+            /**
+             * data 로 값이 넘어온다. log 값 전달.
+             */
+            events: data,
+
+          });
+
+          calendar.render();
+        });
+
+        request.fail(function( jqXHR, textStatus ) {
+          alert( "Request failed: " + textStatus );
+        });
+      });
+
+    }
 
 
   </script>

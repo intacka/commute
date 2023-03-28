@@ -44,8 +44,7 @@ public class CreateController {
                                    @RequestParam("team") String team) {
 
         memberService.createMember(id, pw, name, team);
-
-        return "redirect:/login";
+        return "login";
     }
 
 }

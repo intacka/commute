@@ -1,8 +1,8 @@
 <html lagn="ko" xmlns:th="http://www.thymeleaf.org">
 <!--headerFragment 선언-->
     <div class="header" th:fragment="headerFragment">
-        <div class="grid-item2">AISTUDIO WORK</div>
+        <div class="grid-item2 clickBtn" th:onclick="|location.href='@{/main}'|">COMMUTE WORK</div>
         <div class="grid-item2" th:text="${session.name}">"이름</div>
-        <div class="grid-item2" th:onclick="|location.href='@{/logout}'|">logout</div>
+        <div class="grid-item2 clickBtn" th:onclick="|location.href='@{/logout}'|">logout</div>
     </div>
 </html>

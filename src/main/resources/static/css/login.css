@@ -45,8 +45,8 @@ body {
 
 }
 
-.login-wrapper > h2{
-    font-size: 24px;
+.login-wrapper > h1{
+    font-size: 40px;
     color: #6A24FE;
     margin-bottom: 20px;
     text-align: center;

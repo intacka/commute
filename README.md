@@ -113,5 +113,5 @@
 |<img src="https://user-images.githubusercontent.com/70586428/197694674-88686917-38b4-4d9c-8a6e-93367fb56055.jpg" width="100"/>|
 |[안인택](https://github.com/intacka)|
 
-# Wiki
-[Wiki 보러가기](https://shrouded-marigold-0d2.notion.site/WORK-COMMUTE-07c6a68d058749c0a7fe5e76b46f5668)
+# 개발일지(Wiki)
+[개발일지(Wiki) 보러가기](https://shrouded-marigold-0d2.notion.site/WORK-COMMUTE-07c6a68d058749c0a7fe5e76b46f5668)
